@@ -107,7 +107,7 @@ class Delautris {
             this.addPoint(
                 this.getRandom(0, this.screenWidth),
                 this.getRandom(0, this.screenHeight),
-                this.getRandom(-8, 8)
+                0
             );
         }
     }
@@ -146,11 +146,11 @@ class Delautris {
     };
 
     updatePoints(point: Point){
-        point.z = 16*this.noise.noise3D(point.x / 8, point.y / 8, this.time * 1e-4);
+        point.z = 16*this.noise.noise3D(point.x / 256, point.y / 256, this.time * 1e-4);
     }
 
     drawTriangle(triangle: Triangle){
-        this.ctx.fillStyle=this.increaseBrightness("#550000", ((triangle.a.z + triangle.b.z + triangle.c.z) / 3) / 16 + 0.1);
+        this.ctx.fillStyle=this.increaseBrightness("#550000", -((triangle.a.z + triangle.b.z + triangle.c.z) / 3) / 20 + 0.075);
         this.ctx.beginPath();
         this.ctx.moveTo(triangle.a.x, triangle.a.y);
         this.ctx.lineTo(triangle.b.x, triangle.b.y);
