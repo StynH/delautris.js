@@ -52,7 +52,7 @@ class Delautris {
 
     private readonly noise: SimplexNoise = new SimplexNoise();
 
-    constructor(canvasName: string = "delautrisCanvas", amountOfPoints: number = 32, fps: number = 144) {
+    constructor(canvasName: string = "delautrisCanvas", amountOfPoints: number = 512, fps: number = 144) {
         if(!document.querySelector("#" + canvasName)){
             throw "Canvas not found (ID = " + canvasName + "), make sure it exists.";
         }
