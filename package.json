@@ -1,0 +1,43 @@
+{
+  "name": "delautris",
+  "version": "1.0.0",
+  "description": "Randomly generated visual triangles for backgrounds.",
+  "main": "dist/delautris.js",
+  "scripts": {
+    "watch": "babel --watch src --out-dir dist --extensions .ts,.tsx",
+    "build": "babel src --out-dir dist --extensions .ts,.tsx",
+    "tsc": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GigaNova/delautris.js.git"
+  },
+  "keywords": [
+    "visual",
+    "pretty",
+    "eyecatch",
+    "triangle",
+    "polygon",
+    "triangles",
+    "3d",
+    "3D",
+    "background",
+    "frontend"
+  ],
+  "author": "Styn van de Haterd",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GigaNova/delautris.js/issues"
+  },
+  "homepage": "https://github.com/GigaNova/delautris.js#readme",
+  "devDependencies": {
+    "@babel/core": "^7.7.5",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
+    "@babel/preset-typescript": "^7.7.4"
+  },
+  "dependencies": {
+    "@babel/cli": "^7.7.5",
+    "@babel/preset-env": "^7.7.6"
+  }
+}
