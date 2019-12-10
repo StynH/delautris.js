@@ -5,7 +5,7 @@
   "main": "dist/delautris.js",
   "scripts": {
     "watch": "babel --watch src --out-dir dist --extensions .ts,.tsx",
-    "build": "babel src --out-dir dist --extensions .ts,.tsx",
+    "build": "webpack --mode development",
     "tsc": "tsc"
   },
   "repository": {
@@ -34,10 +34,19 @@
     "@babel/core": "^7.7.5",
     "@babel/plugin-proposal-class-properties": "^7.7.4",
     "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
-    "@babel/preset-typescript": "^7.7.4"
+    "@babel/preset-typescript": "^7.7.4",
+    "webpack-cli": "^3.3.10",
+    "@babel/cli": "^7.7.5",
+    "@babel/plugin-syntax-dynamic-import": "^7.7.4",
+    "@babel/preset-env": "^7.7.6",
+    "@types/delaunator": "^3.0.0",
+    "babel-loader": "^8.0.6",
+    "delaunator": "^4.0.1",
+    "webpack": "^4.41.2",
+    "ts-loader": "^6.2.1"
   },
   "dependencies": {
-    "@babel/cli": "^7.7.5",
-    "@babel/preset-env": "^7.7.6"
+    "awesome-typescript-loader": "^5.2.1",
+    "typescript": "^3.7.3"
   }
 }
