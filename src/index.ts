@@ -1,4 +1,6 @@
 import Delaunator from 'delaunator';
+import Noise from 'simplex-noise';
+import SimplexNoise from "simplex-noise";
 
 class Point{
     public x: number;
@@ -11,7 +13,7 @@ class Point{
         this.z = z;
     }
 
-    toArray(){
+    toArray(): Array<number>{
         return [this.x, this.y];
     }
 }
@@ -26,6 +28,10 @@ class Triangle{
         this.b = b;
         this.c = c;
     }
+
+    get points(): Array<Point>{
+        return [this.a, this.b, this.c];
+    }
 }
 
 class Delautris {
@@ -36,12 +42,15 @@ class Delautris {
 
     private readonly amountOfPoints: number;
     private readonly fps: number;
+    private time: number = 0;
 
     private points: Point[] = [];
     private triangles: Triangle[] = [];
 
     private readonly canvas: HTMLCanvasElement;
     private readonly ctx: CanvasRenderingContext2D;
+
+    private readonly noise: SimplexNoise = new SimplexNoise();
 
     constructor(canvasName: string = "delautrisCanvas", amountOfPoints: number = 32, fps: number = 144) {
         if(!document.querySelector("#" + canvasName)){
@@ -74,14 +83,14 @@ class Delautris {
     }
 
     setup(){
-        this.drawEdge();
+        this.buildEdge();
         this.scatterIndices();
         this.buildTriangles();
     }
 
-    drawEdge(){
-        for(let x = 0; x <= this.screenWidth; x += this.screenWidth / 8){
-            for(let y = 0; y <= this.screenHeight; y += this.screenHeight / 8){
+    buildEdge(){
+        for(let x = 0; x <= this.screenWidth; x += this.screenWidth / 16){
+            for(let y = 0; y <= this.screenHeight; y += this.screenHeight / 16){
                 if(y != 0 && x != 0 && x != this.screenWidth && y != this.screenHeight) continue;
 
                 this.addPoint(
@@ -98,7 +107,7 @@ class Delautris {
             this.addPoint(
                 this.getRandom(0, this.screenWidth),
                 this.getRandom(0, this.screenHeight),
-                0
+                this.getRandom(-8, 8)
             );
         }
     }
@@ -117,28 +126,46 @@ class Delautris {
                 )
             )
         }
-
-        console.log(this.triangles);
     }
 
-    drawPoint(point: Point){
-        this.ctx.fillStyle = "#000000";
-        this.ctx.fillRect(point.x, point.y, 3, 3);
+    increaseBrightness(hex: string, lum: number){
+        hex = String(hex).replace(/[^0-9a-f]/gi, "");
+
+        if (hex.length < 6) {
+            hex = hex.replace(/(.)/g, '$1$1');
+        }
+        lum = lum || 0;
+
+        let rgb = "#", c;
+        for (let i = 0; i < 3; ++i) {
+            c = parseInt(hex.substr(i * 2, 2), 16);
+            c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+            rgb += ("00" + c).substr(c.length);
+        }
+        return rgb;
+    };
+
+    updatePoints(point: Point){
+        point.z = 16*this.noise.noise3D(point.x / 8, point.y / 8, this.time * 1e-4);
     }
 
     drawTriangle(triangle: Triangle){
-        this.ctx.strokeStyle = "#000000";
+        this.ctx.fillStyle=this.increaseBrightness("#550000", ((triangle.a.z + triangle.b.z + triangle.c.z) / 3) / 16 + 0.1);
         this.ctx.beginPath();
         this.ctx.moveTo(triangle.a.x, triangle.a.y);
         this.ctx.lineTo(triangle.b.x, triangle.b.y);
         this.ctx.lineTo(triangle.c.x, triangle.c.y);
         this.ctx.lineTo(triangle.a.x, triangle.a.y);
-        this.ctx.stroke();
+        this.ctx.fill();
     }
 
     mainLoop(){
         this.triangles.forEach((tri) => {
            this.drawTriangle(tri);
+
+            for (let point of tri.points) {
+                this.updatePoints(point);
+            }
         });
     }
 
@@ -146,6 +173,7 @@ class Delautris {
         this.setup();
         setInterval(() => {
             this.mainLoop();
+            this.time += this.interval;
         }, this.interval);
     }
 }

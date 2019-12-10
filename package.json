@@ -46,7 +46,9 @@
     "ts-loader": "^6.2.1"
   },
   "dependencies": {
+    "@types/noisejs": "0.0.28",
     "awesome-typescript-loader": "^5.2.1",
+    "simplex-noise": "^2.4.0",
     "typescript": "^3.7.3"
   }
 }
